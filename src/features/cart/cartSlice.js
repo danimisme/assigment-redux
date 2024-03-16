@@ -26,6 +26,17 @@ const cartReducer = (state = initialState, action) => {
           ),
         };
       }
+      return {
+        ...state,
+        cartItems: [...state.cartItems, { ...action.payload, amount: 1 }],
+      };
+
+    case "cart/clearCart":
+      return {
+        ...state,
+        cartItems: [],
+      };
+
     default:
       return state;
   }
@@ -35,6 +46,12 @@ export const addToCart = (product) => {
   return {
     type: "cart/addToCart",
     payload: product,
+  };
+};
+
+export const clearCart = () => {
+  return {
+    type: "cart/clearCart",
   };
 };
 
