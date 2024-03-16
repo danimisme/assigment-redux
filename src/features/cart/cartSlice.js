@@ -30,21 +30,26 @@ const cartReducer = (state = initialState, action) => {
       }
     }
     case "cart/reduceItem": {
-      const item = state.cartItems.find(
-        (item) => item.id === action.payload.id
-      );
-      if (item) {
-        return {
-          ...state,
-          cartItems: state.cartItems.map((item) =>
-            item.id === action.payload.id
-              ? { ...item, amount: item.amount - 1 }
-              : item
-          ),
-          amount: state.amount - 1,
-          total: state.total - item.price,
-        };
-      }
+      const newItems = state.cartItems
+        .map((item) => {
+          if (item.id === action.payload.id) {
+            if (item.amount === 1) return null;
+            return { ...item, amount: item.amount - 1 };
+          }
+          return item;
+        })
+        .filter((item) => item !== null);
+
+      return {
+        ...state,
+        cartItems: newItems,
+        amount: newItems.reduce((total, item) => {
+          return total + item.amount;
+        }, 0),
+        total: newItems.reduce((total, item) => {
+          return total + item.price * item.amount;
+        }, 0),
+      };
     }
 
     case "cart/removeItem": {
