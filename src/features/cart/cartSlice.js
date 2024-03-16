@@ -47,6 +47,16 @@ const cartReducer = (state = initialState, action) => {
       }
     }
 
+    case "cart/removeItem": {
+      const newItems = state.cartItems.filter(
+        (item) => item.id === action.payload.id
+      );
+      return {
+        ...state,
+        cartItems: newItems,
+      };
+    }
+
     case "cart/clearCart":
       return {
         ...state,
@@ -70,6 +80,13 @@ export const addItem = (id) => {
 export const reduceItem = (id) => {
   return {
     type: "cart/reduceItem",
+    payload: id,
+  };
+};
+
+export const removeItem = (id) => {
+  return {
+    type: "cart/removeItem",
     payload: id,
   };
 };
