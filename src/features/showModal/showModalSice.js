@@ -1,18 +1,18 @@
 const initialState = {
-  showModal: false,
+  show: false,
 };
 
 const showModalReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "showModal/showModal":
+    case "showModal/show":
       return {
         ...state,
-        showModal: true,
+        show: true,
       };
-    case "showModal/hideModal":
+    case "showModal/hide":
       return {
         ...state,
-        showModal: false,
+        show: false,
       };
     default:
       return state;
@@ -21,13 +21,13 @@ const showModalReducer = (state = initialState, action) => {
 
 export const showModal = () => {
   return {
-    type: "showModal/showModal",
+    type: "showModal/show",
   };
 };
 
 export const hideModal = () => {
   return {
-    type: "showModal/hideModal",
+    type: "showModal/hide",
   };
 };
 
