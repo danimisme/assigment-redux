@@ -49,11 +49,17 @@ const cartReducer = (state = initialState, action) => {
 
     case "cart/removeItem": {
       const newItems = state.cartItems.filter(
-        (item) => item.id === action.payload.id
+        (item) => item.id !== action.payload.id
       );
       return {
         ...state,
         cartItems: newItems,
+        amount: newItems.reduce((total, item) => {
+          return total + item.amount;
+        }, 0),
+        total: newItems.reduce((total, item) => {
+          return total + item.price * item.amount;
+        }, 0),
       };
     }
 
