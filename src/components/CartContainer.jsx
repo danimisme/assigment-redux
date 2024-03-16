@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from "react-redux";
-import cartItems from "../cartItems";
 import CartItem from "./CartItem";
 import { showModal } from "../features/showModal/showModalSice";
 import Modal from "./Modal";
@@ -9,6 +8,7 @@ const CartContainer = () => {
   const total = useSelector((store) => store.cart.total);
   const isModalShow = useSelector((store) => store.showModal.show);
   const dispatch = useDispatch();
+  const cartItems = useSelector((store) => store.cart.cartItems);
 
   if (amount < 1) {
     return (
@@ -35,7 +35,13 @@ const CartContainer = () => {
         <hr />
         <div className="cart-total">
           <h4>
-            total <span>${total}</span>
+            total{" "}
+            <span>
+              {total.toLocaleString("US", {
+                style: "currency",
+                currency: "USD",
+              })}
+            </span>
           </h4>
         </div>
         <button className="btn clear-btn" onClick={() => dispatch(showModal())}>
