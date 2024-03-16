@@ -2,8 +2,12 @@ import cartItems from "../../cartItems";
 
 const initialState = {
   cartItems: cartItems,
-  amount: 0,
-  total: 0,
+  amount: cartItems.reduce((total, item) => {
+    return total + item.amount;
+  }, 0),
+  total: cartItems.reduce((total, item) => {
+    return total + item.price * item.amount;
+  }, 0),
 };
 
 const cartReducer = (state = initialState, action) => {
@@ -22,10 +26,6 @@ const cartReducer = (state = initialState, action) => {
           ),
         };
       }
-      return {
-        ...state,
-        cartItems: [...state.cartItems, { ...action.payload, amount: 1 }],
-      };
     default:
       return state;
   }
