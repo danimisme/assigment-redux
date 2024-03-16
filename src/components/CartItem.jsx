@@ -1,6 +1,9 @@
-import { ChevronDown, ChevronUp } from '../icons'
+import { useDispatch } from "react-redux";
+import { ChevronDown, ChevronUp } from "../icons";
+import { addItem } from "../features/cart/cartSlice";
 
 const CartItem = ({ id, img, title, price, amount }) => {
+  const dispacth = useDispatch();
   return (
     <article className="cart-item">
       <img src={img} alt={title} />
@@ -10,7 +13,10 @@ const CartItem = ({ id, img, title, price, amount }) => {
         <button className="remove-btn">remove</button>
       </div>
       <div>
-        <button className="amount-btn">
+        <button
+          className="amount-btn"
+          onClick={() => dispacth(addItem({ id }))}
+        >
           <ChevronUp />
         </button>
         <p className="amount">{amount}</p>
@@ -19,6 +25,6 @@ const CartItem = ({ id, img, title, price, amount }) => {
         </button>
       </div>
     </article>
-  )
-}
-export default CartItem
+  );
+};
+export default CartItem;
