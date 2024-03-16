@@ -1,8 +1,10 @@
-import cartItems from '../cartItems'
-import CartItem from './CartItem'
+import { useSelector } from "react-redux";
+import cartItems from "../cartItems";
+import CartItem from "./CartItem";
 
 const CartContainer = () => {
-  const amount = 2
+  const amount = useSelector((store) => store.cart.amount);
+  const total = useSelector((store) => store.cart.total);
 
   if (amount < 1) {
     return (
@@ -12,7 +14,7 @@ const CartContainer = () => {
           <h4 className="empty-cart">is currently empty</h4>
         </header>
       </section>
-    )
+    );
   }
 
   return (
@@ -22,19 +24,19 @@ const CartContainer = () => {
       </header>
       <div>
         {cartItems.map((item) => {
-          return <CartItem key={item.id} {...item} />
+          return <CartItem key={item.id} {...item} />;
         })}
       </div>
       <footer>
         <hr />
         <div className="cart-total">
           <h4>
-            total <span>$0</span>
+            total <span>${total}</span>
           </h4>
         </div>
         <button className="btn clear-btn">clear cart</button>
       </footer>
     </section>
-  )
-}
-export default CartContainer
+  );
+};
+export default CartContainer;
