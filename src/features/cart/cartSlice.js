@@ -12,7 +12,7 @@ const initialState = {
 
 const cartReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "cart/addItem":
+    case "cart/addItem": {
       const item = state.cartItems.find(
         (item) => item.id === action.payload.id
       );
@@ -28,6 +28,24 @@ const cartReducer = (state = initialState, action) => {
           total: state.total + item.price,
         };
       }
+    }
+    case "cart/reduceItem": {
+      const item = state.cartItems.find(
+        (item) => item.id === action.payload.id
+      );
+      if (item) {
+        return {
+          ...state,
+          cartItems: state.cartItems.map((item) =>
+            item.id === action.payload.id
+              ? { ...item, amount: item.amount - 1 }
+              : item
+          ),
+          amount: state.amount - 1,
+          total: state.total - item.price,
+        };
+      }
+    }
 
     case "cart/clearCart":
       return {
@@ -45,6 +63,13 @@ const cartReducer = (state = initialState, action) => {
 export const addItem = (id) => {
   return {
     type: "cart/addItem",
+    payload: id,
+  };
+};
+
+export const reduceItem = (id) => {
+  return {
+    type: "cart/reduceItem",
     payload: id,
   };
 };
