@@ -12,7 +12,7 @@ const initialState = {
 
 const cartReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "cart/addToCart":
+    case "cart/addItem":
       const item = state.cartItems.find(
         (item) => item.id === action.payload.id
       );
@@ -24,12 +24,10 @@ const cartReducer = (state = initialState, action) => {
               ? { ...item, amount: item.amount + 1 }
               : item
           ),
+          amount: state.amount + 1,
+          total: state.total + item.price,
         };
       }
-      return {
-        ...state,
-        cartItems: [...state.cartItems, { ...action.payload, amount: 1 }],
-      };
 
     case "cart/clearCart":
       return {
@@ -44,10 +42,10 @@ const cartReducer = (state = initialState, action) => {
   }
 };
 
-export const addToCart = (product) => {
+export const addItem = (id) => {
   return {
-    type: "cart/addToCart",
-    payload: product,
+    type: "cart/addItem",
+    payload: id,
   };
 };
 
