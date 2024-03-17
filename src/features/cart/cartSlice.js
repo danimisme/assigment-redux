@@ -1,7 +1,11 @@
 import cartItems from "../../cartItems";
 
 const initialState = {
-  cartItems: cartItems,
+  //maping cartItems untuk merubah price dari string manjadi float
+  cartItems: cartItems.map((item) => ({
+    ...item,
+    price: parseFloat(item.price),
+  })),
   amount: cartItems.reduce((total, item) => {
     return total + item.amount;
   }, 0),
