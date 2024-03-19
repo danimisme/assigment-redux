@@ -4,11 +4,9 @@ import { showModal } from "../features/showModal/showModalSice";
 import Modal from "./Modal";
 
 const CartContainer = () => {
-  const amount = useSelector((store) => store.cart.amount);
-  const total = useSelector((store) => store.cart.total);
+  const { amount, total, cartItems } = useSelector((store) => store.cart);
   const isModalShow = useSelector((store) => store.showModal.show);
   const dispatch = useDispatch();
-  const cartItems = useSelector((store) => store.cart.cartItems);
 
   if (amount < 1) {
     return (
