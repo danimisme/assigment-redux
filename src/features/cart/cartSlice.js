@@ -17,22 +17,17 @@ const initialState = {
 const cartReducer = (state = initialState, action) => {
   switch (action.type) {
     case "cart/addItem": {
-      const item = state.cartItems.find(
-        (item) => item.id === action.payload.id
+      const newItems = state.cartItems.map((item) =>
+        item.id === action.payload.id
+          ? { ...item, amount: item.amount + 1 }
+          : item
       );
-      if (item) {
-        return {
-          ...state,
-          cartItems: state.cartItems.map((item) =>
-            item.id === action.payload.id
-              ? { ...item, amount: item.amount + 1 }
-              : item
-          ),
-          amount: state.amount + 1,
-          total: state.total + item.price,
-        };
-      }
+      return {
+        ...state,
+        cartItems: newItems,
+      };
     }
+
     case "cart/reduceItem": {
       const newItems = state.cartItems
         .map((item) => {
@@ -43,16 +38,9 @@ const cartReducer = (state = initialState, action) => {
           return item;
         })
         .filter((item) => item !== null);
-
       return {
         ...state,
         cartItems: newItems,
-        amount: newItems.reduce((total, item) => {
-          return total + item.amount;
-        }, 0),
-        total: newItems.reduce((total, item) => {
-          return total + item.price * item.amount;
-        }, 0),
       };
     }
 
@@ -63,12 +51,6 @@ const cartReducer = (state = initialState, action) => {
       return {
         ...state,
         cartItems: newItems,
-        amount: newItems.reduce((total, item) => {
-          return total + item.amount;
-        }, 0),
-        total: newItems.reduce((total, item) => {
-          return total + item.price * item.amount;
-        }, 0),
       };
     }
 
@@ -76,8 +58,17 @@ const cartReducer = (state = initialState, action) => {
       return {
         ...state,
         cartItems: [],
-        amount: 0,
-        total: 0,
+      };
+
+    case "cart/getTotals":
+      return {
+        ...state,
+        amount: state.cartItems.reduce((total, item) => {
+          return total + item.amount;
+        }, 0),
+        total: state.cartItems.reduce((total, item) => {
+          return total + item.amount * item.price;
+        }, 0),
       };
 
     default:
@@ -86,29 +77,30 @@ const cartReducer = (state = initialState, action) => {
 };
 
 export const addItem = (id) => {
-  return {
-    type: "cart/addItem",
-    payload: id,
+  return (dispatch) => {
+    dispatch({ type: "cart/addItem", payload: id });
+    dispatch({ type: "cart/getTotals" });
   };
 };
 
 export const reduceItem = (id) => {
-  return {
-    type: "cart/reduceItem",
-    payload: id,
+  return (dispatch) => {
+    dispatch({ type: "cart/reduceItem", payload: id });
+    dispatch({ type: "cart/getTotals" });
   };
 };
 
 export const removeItem = (id) => {
-  return {
-    type: "cart/removeItem",
-    payload: id,
+  return (dispatch) => {
+    dispatch({ type: "cart/removeItem", payload: id });
+    dispatch({ type: "cart/getTotals" });
   };
 };
 
 export const clearCart = () => {
-  return {
-    type: "cart/clearCart",
+  return (dispatch) => {
+    dispatch({ type: "cart/clearCart" });
+    dispatch({ type: "cart/getTotals" });
   };
 };
 
